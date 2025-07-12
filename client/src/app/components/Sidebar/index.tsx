@@ -90,6 +90,7 @@ const Sidebar = () => {
           height={27}
           className="rounded w-8"
         />
+        
         <h1
           className={`${
             isSidebarCollapsed ? "hidden" : "block"
@@ -153,5 +154,4 @@ const Sidebar = () => {
     </div>
   );
 };
-
 export default Sidebar;
