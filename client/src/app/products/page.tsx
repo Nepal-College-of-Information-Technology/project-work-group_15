@@ -3,8 +3,8 @@
 import { useCreateProductMutation, useGetProductsQuery } from "@/state/api";
 import { PlusCircleIcon, SearchIcon } from "lucide-react";
 import { useState } from "react";
-import Header from "@/app/(components)/Header";
-import Rating from "@/app/(components)/Rating";
+import Header from "@/app/components/Header";
+import Rating from "@/app/components/Rating";
 import CreateProductModal from "./CreateProductModal";
 import Image from "next/image";
 
