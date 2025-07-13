@@ -88,3 +88,16 @@
       </form>
       <div id="studentMsg"></div>
     </section>
+
+     <section id="coursesSection" style="display:none;">
+      <h2>Department</h2>
+      <button onclick="loadCourses()">Refresh List</button>
+      <div id="coursesList"></div>
+      <h3>Add Course</h3>
+      <form id="addCourseForm">
+        <input type="text" id="courseTitle" placeholder="Title" required />
+        <input type="text" id="courseDescription" placeholder="Description" required />
+        <button type="submit">Add Course</button>
+      </form>
+      <div id="courseMsg"></div>
+    </section>
