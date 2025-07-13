@@ -115,3 +115,225 @@
       <div id="enrollmentMsg"></div>
     </section>
   </div>
+
+  <script>
+    let accessToken = null;
+
+    const loginSection = document.getElementById('loginSection');
+    const dashboard = document.getElementById('dashboard');
+
+    const loginForm = document.getElementById('loginForm');
+    const loginMsg = document.getElementById('loginMsg');
+
+    const studentsSection = document.getElementById('studentsSection');
+    const coursesSection = document.getElementById('coursesSection');
+    const enrollmentsSection = document.getElementById('enrollmentsSection');
+
+    function showSection(name) {
+      studentsSection.style.display = 'none';
+      coursesSection.style.display = 'none';
+      enrollmentsSection.style.display = 'none';
+      if (name === 'students') studentsSection.style.display = 'block';
+      else if (name === 'courses') coursesSection.style.display = 'block';
+      else if (name === 'enrollments') enrollmentsSection.style.display = 'block';
+    }
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      loginMsg.textContent = '';
+      loginMsg.className = '';
+
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      const formData = new URLSearchParams();
+      formData.append('username', username);
+      formData.append('password', password);
+
+      try {
+        const response = await fetch('/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: formData.toString()
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          accessToken = data.access_token;
+          loginMsg.textContent = 'Login successful!';
+          loginMsg.className = 'message';
+
+          loginSection.style.display = 'none';
+          dashboard.style.display = 'block';
+          showSection('students');
+          loadStudents();
+        } else {
+          loginMsg.textContent = data.detail || 'Login failed';
+          loginMsg.className = 'error';
+        }
+      } catch (error) {
+        loginMsg.textContent = 'Error connecting to server.';
+        loginMsg.className = 'error';
+      }
+    });
+
+    function logout() {
+      accessToken = null;
+      loginSection.style.display = 'block';
+      dashboard.style.display = 'none';
+      loginMsg.textContent = 'Logged out.';
+      loginMsg.className = 'message';
+    }
+
+    // Render students table
+    function renderStudentsTable(students) {
+      if (!students || students.length === 0) {
+        document.getElementById('studentsList').innerHTML = '<p>No students found.</p>';
+        return;
+      }
+      let html = '<table><thead><tr><th>ID</th><th>Name</th><th>Email</th></tr></thead><tbody>';
+      students.forEach(s => {
+        html += `<tr><td>${s.id}</td><td>${s.name}</td><td>${s.email}</td></tr>`;
+      });
+      html += '</tbody></table>';
+      document.getElementById('studentsList').innerHTML = html;
+    }
+
+    async function loadStudents() {
+      try {
+        const res = await fetch('/students', {
+          headers: { 'Authorization': 'Bearer ' + accessToken }
+        });
+        if (res.status === 401) {
+          alert('Unauthorized! Please login again.');
+          logout();
+          return;
+        }
+        if (!res.ok) {
+          alert('Error loading students: ' + res.status);
+          return;
+        }
+        const students = await res.json();
+        renderStudentsTable(students);
+      } catch (e) {
+        alert('Error loading students: ' + e.message);
+      }
+    }
+
+    const addStudentForm = document.getElementById('addStudentForm');
+    const studentMsg = document.getElementById('studentMsg');
+    addStudentForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      studentMsg.textContent = '';
+      studentMsg.className = '';
+
+      const name = document.getElementById('studentName').value;
+      const email = document.getElementById('studentEmail').value;
+
+      try {
+        const res = await fetch('/students', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + accessToken
+          },
+          body: JSON.stringify({ name, email })
+        });
+        if (res.status === 401) {
+          alert('Unauthorized! Please login again.');
+          logout();
+          return;
+        }
+        if (res.ok) {
+          const student = await res.json();
+          studentMsg.textContent = 'Student added: ' + JSON.stringify(student);
+          studentMsg.className = 'message';
+          addStudentForm.reset();
+          loadStudents();
+        } else {
+          const err = await res.json();
+          studentMsg.textContent = 'Error: ' + (err.detail || res.status);
+          studentMsg.className = 'error';
+        }
+      } catch (e) {
+        studentMsg.textContent = 'Error: ' + e.message;
+        studentMsg.className = 'error';
+      }
+    });
+
+    // Render courses table
+    function renderCoursesTable(courses) {
+      if (!courses || courses.length === 0) {
+        document.getElementById('coursesList').innerHTML = '<p>No courses found.</p>';
+        return;
+      }
+      let html = '<table><thead><tr><th>ID</th><th>Title</th><th>Description</th></tr></thead><tbody>';
+      courses.forEach(c => {
+        html += `<tr><td>${c.id}</td><td>${c.title}</td><td>${c.description}</td></tr>`;
+      });
+      html += '</tbody></table>';
+      document.getElementById('coursesList').innerHTML = html;
+    }
+
+    async function loadCourses() {
+      try {
+        const res = await fetch('/courses', {
+          headers: { 'Authorization': 'Bearer ' + accessToken }
+        });
+        if (res.status === 401) {
+          alert('Unauthorized! Please login again.');
+          logout();
+          return;
+        }
+        if (!res.ok) {
+          alert('Error loading courses: ' + res.status);
+          return;
+        }
+        const courses = await res.json();
+        renderCoursesTable(courses);
+      } catch (e) {
+        alert('Error loading courses: ' + e.message);
+      }
+    }
+
+    const addCourseForm = document.getElementById('addCourseForm');
+    const courseMsg = document.getElementById('courseMsg');
+    addCourseForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      courseMsg.textContent = '';
+      courseMsg.className = '';
+
+      const title = document.getElementById('courseTitle').value;
+      const description = document.getElementById('courseDescription').value;
+
+      try {
+        const res = await fetch('/courses', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + accessToken
+          },
+          body: JSON.stringify({ title, description })
+        });
+        if (res.status === 401) {
+          alert('Unauthorized! Please login again.');
+          logout();
+          return;
+        }
+        if (res.ok) {
+          const course = await res.json();
+          courseMsg.textContent = 'Course added: ' + JSON.stringify(course);
+          courseMsg.className = 'message';
+          addCourseForm.reset();
+          loadCourses();
+        } else {
+          const err = await res.json();
+          courseMsg.textContent = 'Error: ' + (err.detail || res.status);
+          courseMsg.className = 'error';
+        }
+      } catch (e) {
+        courseMsg.textContent = 'Error: ' + e.message;
+        courseMsg.className = 'error';
+      }
+    });
