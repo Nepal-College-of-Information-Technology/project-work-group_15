@@ -75,3 +75,16 @@
       <button onclick="showSection('enrollments')">Enrollments</button>
       <button onclick="logout()">Logout</button>
     </nav>
+
+    <section id="studentsSection" style="display:none;">
+      <h2>Students</h2>
+      <button onclick="loadStudents()">Refresh List</button>
+      <div id="studentsList"></div>
+      <h3>Add Student</h3>
+      <form id="addStudentForm">
+        <input type="text" id="studentName" placeholder="Name" required />
+        <input type="email" id="studentEmail" placeholder="Email" required />
+        <button type="submit">Add Student</button>
+      </form>
+      <div id="studentMsg"></div>
+    </section>
