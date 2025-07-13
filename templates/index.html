@@ -337,3 +337,83 @@
         courseMsg.className = 'error';
       }
     });
+
+    
+    // Render enrollments table
+    function renderEnrollmentsTable(enrollments) {
+      if (!enrollments || enrollments.length === 0) {
+        document.getElementById('enrollmentsList').innerHTML = '<p>No enrollments found.</p>';
+        return;
+      }
+      let html = '<table><thead><tr><th>ID</th><th>Student ID</th><th>Course ID</th></tr></thead><tbody>';
+      enrollments.forEach(e => {
+        html += `<tr><td>${e.id}</td><td>${e.student_id}</td><td>${e.course_id}</td></tr>`;
+      });
+      html += '</tbody></table>';
+      document.getElementById('enrollmentsList').innerHTML = html;
+    }
+
+    async function loadEnrollments() {
+      try {
+        const res = await fetch('/enrollments', {
+          headers: { 'Authorization': 'Bearer ' + accessToken }
+        });
+        if (res.status === 401) {
+          alert('Unauthorized! Please login again.');
+          logout();
+          return;
+        }
+        if (!res.ok) {
+          alert('Error loading enrollments: ' + res.status);
+          return;
+        }
+        const enrollments = await res.json();
+        renderEnrollmentsTable(enrollments);
+      } catch (e) {
+        alert('Error loading enrollments: ' + e.message);
+      }
+    }
+
+    const addEnrollmentForm = document.getElementById('addEnrollmentForm');
+    const enrollmentMsg = document.getElementById('enrollmentMsg');
+    addEnrollmentForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      enrollmentMsg.textContent = '';
+      enrollmentMsg.className = '';
+
+      const student_id = parseInt(document.getElementById('enrollStudentId').value);
+      const course_id = parseInt(document.getElementById('enrollCourseId').value);
+
+      try {
+        const res = await fetch('/enrollments', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + accessToken
+          },
+          body: JSON.stringify({ student_id, course_id })
+        });
+        if (res.status === 401) {
+          alert('Unauthorized! Please login again.');
+          logout();
+          return;
+        }
+        if (res.ok) {
+          const enrollment = await res.json();
+          enrollmentMsg.textContent = 'Enrollment added: ' + JSON.stringify(enrollment);
+          enrollmentMsg.className = 'message';
+          addEnrollmentForm.reset();
+          loadEnrollments();
+        } else {
+          const err = await res.json();
+          enrollmentMsg.textContent = 'Error: ' + (err.detail || res.status);
+          enrollmentMsg.className = 'error';
+        }
+      } catch (e) {
+        enrollmentMsg.textContent = 'Error: ' + e.message;
+        enrollmentMsg.className = 'error';
+      }
+    });
+  </script>
+</body>
+</html>
