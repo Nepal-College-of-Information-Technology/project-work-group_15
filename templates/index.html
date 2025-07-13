@@ -101,3 +101,17 @@
       </form>
       <div id="courseMsg"></div>
     </section>
+
+     <section id="enrollmentsSection" style="display:none;">
+      <h2>Enrollments</h2>
+      <button onclick="loadEnrollments()">Refresh List</button>
+      <div id="enrollmentsList"></div>
+      <h3>Add Enrollment</h3>
+      <form id="addEnrollmentForm">
+        <input type="number" id="enrollStudentId" placeholder="Student ID" required />
+        <input type="number" id="enrollCourseId" placeholder="Course ID" required />
+        <button type="submit">Add Enrollment</button>
+      </form>
+      <div id="enrollmentMsg"></div>
+    </section>
+  </div>
