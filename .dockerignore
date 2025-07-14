@@ -1,0 +1,11 @@
+*.exe
+*.bat
+*.cmd
+*.ps1
+__pycache__/
+*.pyc
+.vscode/
+.venv/
+.DS_Store
+docker-compose.yaml
+Dockerfile
