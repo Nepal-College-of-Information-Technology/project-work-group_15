@@ -14,9 +14,9 @@
 ### Group Number: XX  
 | Name               | Roll Number | Role            |  
 |--------------------|-------------|-----------------|  
-| Laxman Khatri      | 221623          | Frontend Dev    |  
+| Laxman Khatri      | 221623          | Fullstack    |  
 | Denisha Adhikari   | 221651          | Backend Dev     |  
-| Abhishek Bhattarai | 221605          | Mobile App Dev  |  
+| Abhishek Bhattarai | 221605          | Frontend  Dev|  
 
 ---
 
