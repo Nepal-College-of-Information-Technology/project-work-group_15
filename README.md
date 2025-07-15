@@ -11,7 +11,7 @@
 ---
 
 ## 🧑‍🤝‍🧑 Team Members  
-### Group Number: XX  
+### Group Number: 3  
 | Name               | Roll Number | Role            |  
 |--------------------|-------------|-----------------|  
 | Laxman Khatri      | 221623          | Fullstack    |  
