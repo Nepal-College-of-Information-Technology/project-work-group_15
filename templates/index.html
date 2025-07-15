@@ -125,6 +125,37 @@ h1, h2, h3 {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
 }
+.landing-subsection {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+  margin: 2rem auto;
+  color: #2c3e50;
+  width: 90%;
+  max-width: 1000px;
+}
+
+    .landing-subsection h3 {
+      font-size: 1.5rem;
+      color: #004080;
+      margin-bottom: 1rem;
+    }
+    .landing-subsection ul {
+      padding-left: 1.5rem;
+      list-style-type: disc;
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+    .nav-landing-links {
+      gap: 1rem;
+    }
+    @media (max-width: 650px) {
+      .nav-landing-links {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
 
 /* Forms */
 form {
@@ -247,10 +278,12 @@ section.active {
 </head>
 <body>
 
-  <!-- Navbar -->
+<!-- ✅ Navbar with About & Services -->
   <nav>
-    <div class="nav-left" id="navLeft">
+    <div class="nav-left nav-landing-links" id="navLeft">
       <a href="#" onclick="showLandingPage(event)">Home</a>
+      <a href="#aboutUs">About Us</a>
+      <a href="#services">Services</a>
       <a href="#" id="navLoginLink" onclick="showLogin(event)">Login</a>
     </div>
     <div class="nav-right" id="navRight" style="display:none;">
@@ -261,13 +294,34 @@ section.active {
     </div>
   </nav>
 
-<!-- Landing Page -->
+  <!-- ✅ Landing Page -->
 <div class="landing-container" id="landingPage">
   <div class="landing-content">
     <h1>🎓 Welcome to the College Management System</h1>
     <p class="lead">Effortlessly manage students, departments, and enrollments in one place.</p>
     <p class="sub">Secure. Fast. User-friendly.</p>
     <button onclick="showLogin(event)">Get Started</button>
+  </div>
+
+  <!-- ✅ Full-width About Us Section -->
+  <div class="landing-subsection" id="aboutUs">
+    <h3>👨‍👩‍👧‍👦 About Us</h3>
+    <ul>
+      <li><strong>Denisha Adhikari</strong> – UI/UX Designer & Frontend Integrator</li>
+      <li><strong>Abhishek Bhatthrai</strong> – Backend Developer & API Manager</li>
+      <li><strong>Laxman Khatri</strong> – Project Lead & Fullstack Developer</li>
+    </ul>
+  </div>
+
+  <!-- ✅ Full-width Services Section -->
+  <div class="landing-subsection" id="services">
+    <h3>🛠️ Services</h3>
+    <ul>
+      <li>📚 Student Record Management</li>
+      <li>🏢 Department (Course) Management</li>
+      <li>📝 Student Enrollments with Secure Authentication</li>
+      <li>📊 Dynamic Dashboards with Real-time Updates</li>
+    </ul>
   </div>
 </div>
 
